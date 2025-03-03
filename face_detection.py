@@ -1,36 +1,56 @@
 import cv2
-import mediapipe as mp
+import os
 
-# Initialize Mediapipe Face Detection
-mp_face_detection = mp.solutions.face_detection
-mp_drawing = mp.solutions.drawing_utils
-face_detection = mp_face_detection.FaceDetection(min_detection_confidence=0.5)
+# Load the pre-trained face detection model
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
-# Open webcam
-cap = cv2.VideoCapture(0)
+# Path where class image is stored
+image_folder = "class_images"
 
-while cap.isOpened():
-    ret, frame = cap.read()
-    if not ret:
-        break
+# Get the latest image from the folder
+def get_latest_image(folder):
+    files = [f for f in os.listdir(folder) if f.endswith((".jpg", ".png"))]
+    if not files:
+        raise ValueError(f"❌ Error: No image found in {folder}!")
+    latest_file = max(files, key=lambda f: os.path.getctime(os.path.join(folder, f)))
+    return os.path.join(folder, latest_file)
 
-    # Convert frame to RGB
-    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+# Detect faces and crop them
+def detect_faces(image_path, output_folder):
+    image = cv2.imread(image_path)
     
+    if image is None:
+        raise ValueError("❌ Error: Could not read the image!")
+
+    # Convert to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
     # Detect faces
-    results = face_detection.process(rgb_frame)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(100, 100))
 
-    # Draw face detection results
-    if results.detections:
-        for detection in results.detections:
-            mp_drawing.draw_detection(frame, detection)
+    if len(faces) == 0:
+        raise ValueError("❌ Error: No faces detected!")
 
-    # Show the frame
-    cv2.imshow("Face Detection", frame)
+    print(f"✅ Faces detected: {len(faces)}")
 
-    # Press 'q' to exit
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    # Create output folder if not exists
+    os.makedirs(output_folder, exist_ok=True)
 
-cap.release()
-cv2.destroyAllWindows()
+    cropped_faces = []
+    for i, (x, y, w, h) in enumerate(faces):
+        face_crop = image[y:y+h, x:x+w]  # Crop the face region
+        face_filename = os.path.join(output_folder, f"cropped_face_{i+1}.jpg")
+        cv2.imwrite(face_filename, face_crop)
+        cropped_faces.append(face_filename)
+        print(f"✅ Cropped face saved: {face_filename}")
+
+    return cropped_faces
+
+# Main execution
+if __name__ == "__main__":
+    try:
+        image_path = get_latest_image(image_folder)
+        print(f"📸 Processing image: {image_path}")
+        detect_faces(image_path, "cropped_faces")
+    except Exception as e:
+        print(str(e))
