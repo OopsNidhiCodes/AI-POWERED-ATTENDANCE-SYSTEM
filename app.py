@@ -65,7 +65,7 @@ def process(image):
     if not session.get("logged_in"):
         return redirect(url_for("login"))
 
-    faces, error = detect_faces(image)
+    faces, error = detect_faces()
     if faces:
         matched_faces = match_faces()
         return render_template("attendance.html", faces=matched_faces)
