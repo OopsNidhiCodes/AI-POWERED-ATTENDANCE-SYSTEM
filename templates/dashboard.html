@@ -1,11 +1,129 @@
-<h1>Welcome Faculty!</h1>
-<form action="/capture" method="post">
-    <button type="submit">Capture Image</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Portal - Animated</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #4a00e0, #8e2de2);
+            color: #fff;
+            text-align: center;
+            overflow: hidden; /* Prevent scrollbars */
+        }
 
-<form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" required>
-    <button type="submit">Upload Image</button>
-</form>
+        h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInDown 1s ease-out;
+        }
 
-<a href="/logout">Logout</a>
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        form, a {
+            margin: 15px 0;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        form button, a {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        form:hover button, a:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: moveParticles linear infinite;
+        }
+
+        @keyframes moveParticles {
+            0% { transform: translateY(0) translateX(0); }
+            100% { transform: translateY(100vh) translateX(100vw); }
+        }
+    </style>
+    <script>
+        function createParticles(count) {
+            const particlesContainer = document.querySelector('.particles');
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 8 + 4;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const speed = Math.random() * 8 + 4;
+                const color = rgba(255, 255, 255, ${Math.random() * 0.5 + 0.3});
+
+                particle.style.width = ${size}px;
+                particle.style.height = ${size}px;
+                particle.style.left = ${x}vw;
+                particle.style.top = ${y}vh;
+                particle.style.backgroundColor = color;
+                particle.style.animationDuration = ${speed}s;
+                particle.style.animationDelay = ${Math.random() * 5}s;
+
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        window.onload = function() {
+            createParticles(50); // Adjust number of particles
+        };
+    </script>
+</head>
+<body>
+    <div class="particles"></div>
+    <h1>Welcome Faculty!</h1>
+
+    <form action="/capture" method="post">
+        <button type="submit">Capture Image</button>
+    </form>
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Upload Image</button>
+    </form>
+
+    <a href="/logout">Logout</a>
+</body>
+</html>

@@ -1,5 +1,110 @@
-<h1>Attendance Marked</h1>
-{% for face in faces %}
-    <p>{{ face }} - Present</p>
-{% endfor %}
-<a href="/dashboard">Go Back</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Marked - Animated</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #4CAF50, #8BC34A); /* Green gradient */
+            color: #fff;
+            text-align: center;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 10px 0;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        a {
+            margin-top: 30px;
+            padding: 15px 30px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        a:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Animated confetti effect */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #fff;
+            animation: confettiFall linear infinite;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-100px) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+    </style>
+    <script>
+        function createConfetti(count) {
+            for (let i = 0; i < count; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                const x = Math.random() * 100;
+                const speed = Math.random() * 5 + 3;
+                const size = Math.random() * 8 + 4;
+                const color = hsl(${Math.random() * 360}, 100%, 50%);
+
+                confetti.style.left = ${x}vw;
+                confetti.style.animationDuration = ${speed}s;
+                confetti.style.animationDelay = ${Math.random() * 2}s;
+                confetti.style.width = ${size}px;
+                confetti.style.height = ${size}px;
+                confetti.style.backgroundColor = color;
+                document.body.appendChild(confetti);
+            }
+        }
+
+        window.onload = function() {
+            createConfetti(100); // Adjust number of confetti pieces
+        };
+    </script>
+</head>
+<body>
+    <h1>Attendance Marked</h1>
+    {% for face in faces %}
+        <p>{{ face }} - Present</p>
+    {% endfor %}
+    <a href="/dashboard">Go Back</a>
+</body>
+</html>

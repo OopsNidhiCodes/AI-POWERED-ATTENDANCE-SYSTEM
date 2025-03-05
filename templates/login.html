@@ -3,20 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faculty Login</title>
+    <title>Faculty Portal Access</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
-        form { display: inline-block; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
-        input { display: block; margin: 10px 0; padding: 8px; }
-        button { background: #007BFF; color: #fff; padding: 10px; border: none; cursor: pointer; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 1s ease-out; /* Fade-in animation */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: pulse 2s infinite ease-in-out; /* Pulse animation for heading */
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        input {
+            display: block;
+            width: calc(100% - 22px); /* Adjust for padding */
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s ease; /* Smooth border transition */
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #007BFF;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle focus effect */
+        }
+
+        button {
+            background: #007BFF;
+            color: #fff;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth button transitions */
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px); /* Slight lift on hover */
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: moveParticles linear infinite;
+        }
+
+        @keyframes moveParticles {
+            0% { transform: translateY(0) translateX(0); }
+            100% { transform: translateY(100vh) translateX(100vw); }
+        }
+
     </style>
 </head>
 <body>
-    <h2>Faculty Login</h2>
-    <form action="{{ url_for('login') }}" method="post">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
+    <div class="particles">
+        <script>
+            function createParticles(count) {
+                const particlesContainer = document.querySelector('.particles');
+                for (let i = 0; i < count; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    const size = Math.random() * 10 + 5;
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+                    const speed = Math.random() * 5 + 2;
+                    const color = rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.7);
+
+                    particle.style.width = ${size}px;
+                    particle.style.height = ${size}px;
+                    particle.style.left = ${x}vw;
+                    particle.style.top = ${y}vh;
+                    particle.style.backgroundColor = color;
+                    particle.style.animationDuration = ${speed}s;
+                    particle.style.animationDelay = ${Math.random() * 5}s;
+
+                    particlesContainer.appendChild(particle);
+                }
+            }
+
+            createParticles(50); // Adjust number of particles
+        </script>
+    </div>
+
+    <div class="login-container">
+        <h2>Faculty Login</h2>
+        <form action="{{ url_for('login') }}" method="post">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
 </body>
 </html>
