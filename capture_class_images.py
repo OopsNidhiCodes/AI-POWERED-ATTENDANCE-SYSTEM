@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 # Define function to capture class image
-def capture_class_image():
+def capture_image():
     save_path = "class_images"
     os.makedirs(save_path, exist_ok=True)
 
