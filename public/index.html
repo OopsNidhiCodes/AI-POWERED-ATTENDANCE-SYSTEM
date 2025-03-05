@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Attendance System</title>
+    <script>
+        async function uploadImage(event) {
+            event.preventDefault();
+            let formData = new FormData(document.getElementById("uploadForm"));
+            let response = await fetch("/upload", { method: "POST", body: formData });
+            let result = await response.json();
+            document.getElementById("result").innerText = result.match_status;
+        }
+
+        async function captureFromWebcam() {
+            let response = await fetch("/capture", { method: "GET" });
+            let result = await response.json();
+            document.getElementById("result").innerText = result.match_status;
+        }
+    </script>
+</head>
+<body>
+    <h1>AI Attendance System</h1>
+    <p>Upload an image OR capture from webcam to mark attendance.</p>
+    
+    <form id="uploadForm" onsubmit="uploadImage(event)" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <button type="submit">Upload</button>
+    </form>
+
+    <button onclick="captureFromWebcam()">Capture from Webcam</button>
+
+    <h3>Result:</h3>
+    <p id="result"></p>
+
+    <h3>Attendance Record:</h3>
+    <a href="/static/attendance.csv" target="_blank">Download Attendance CSV</a>
+</body>
+</html>

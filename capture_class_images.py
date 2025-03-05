@@ -2,35 +2,27 @@ import cv2
 import os
 from datetime import datetime
 
-# Create a folder for storing images
-save_path = "class_images"
-os.makedirs(save_path, exist_ok=True)
+# Define function to capture class image
+def capture_class_image():
+    save_path = "class_images"
+    os.makedirs(save_path, exist_ok=True)
 
-# Open webcam (change 0 to the correct camera index if using an external camera)
-cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0)  # Open webcam
 
-if not cap.isOpened():
-    raise Exception("⚠️ Error: Could not access the camera!")
+    if not cap.isOpened():
+        print("⚠️ Error: Could not access the camera!")
+        return None
 
-# Capture frame
-ret, frame = cap.read()
+    ret, frame = cap.read()
+    cap.release()  # Release the camera after capturing
 
-if ret:
-    # Generate filename based on timestamp
-    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    image_filename = f"class_{timestamp}.jpg"
-    image_path = os.path.join(save_path, image_filename)
-
-    # Save image
-    cv2.imwrite(image_path, frame)
-    print(f"✅ Image saved: {image_path}")
-
-    # Show image preview
-    cv2.imshow("Captured Image", frame)
-    cv2.waitKey(2000)  # Show for 2 seconds
-    cv2.destroyAllWindows()
-
-else:
-    print("⚠️ Error: Failed to capture image!")
-
-cap.release()
+    if ret:
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        image_filename = f"class_{timestamp}.jpg"
+        image_path = os.path.join(save_path, image_filename)
+        cv2.imwrite(image_path, frame)
+        print(f"✅ Image saved: {image_path}")
+        return image_path  # Return the path of the captured image
+    else:
+        print("⚠️ Error: Failed to capture image!")
+        return None

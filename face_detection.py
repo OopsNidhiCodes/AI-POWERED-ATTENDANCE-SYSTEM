@@ -1,11 +1,13 @@
 import cv2
 import os
+from mtcnn import MTCNN
 
-# Load the pre-trained face detection model
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+# Initialize MTCNN detector
+detector = MTCNN()
 
 # Path where class image is stored
 image_folder = "class_images"
+output_folder = "cropped_faces"
 
 # Get the latest image from the folder
 def get_latest_image(folder):
@@ -16,19 +18,17 @@ def get_latest_image(folder):
     return os.path.join(folder, latest_file)
 
 # Detect faces and crop them
-def detect_faces(image_path, output_folder):
+def detect_faces():
+    image_path = get_latest_image(image_folder)
     image = cv2.imread(image_path)
-    
+
     if image is None:
         raise ValueError("❌ Error: Could not read the image!")
 
-    # Convert to grayscale
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-    # Detect faces
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(100, 100))
-
-    if len(faces) == 0:
+    # Detect faces using MTCNN
+    faces = detector.detect_faces(image)
+    
+    if not faces:
         raise ValueError("❌ Error: No faces detected!")
 
     print(f"✅ Faces detected: {len(faces)}")
@@ -37,7 +37,12 @@ def detect_faces(image_path, output_folder):
     os.makedirs(output_folder, exist_ok=True)
 
     cropped_faces = []
-    for i, (x, y, w, h) in enumerate(faces):
+    for i, face in enumerate(faces):
+        x, y, w, h = face['box']
+
+        # Expand bounding box slightly to avoid cropping too much
+        x, y, w, h = max(0, x-10), max(0, y-10), w+20, h+20
+
         face_crop = image[y:y+h, x:x+w]  # Crop the face region
         face_filename = os.path.join(output_folder, f"cropped_face_{i+1}.jpg")
         cv2.imwrite(face_filename, face_crop)
@@ -46,11 +51,9 @@ def detect_faces(image_path, output_folder):
 
     return cropped_faces
 
-# Main execution
+# Main execution (for testing)
 if __name__ == "__main__":
     try:
-        image_path = get_latest_image(image_folder)
-        print(f"📸 Processing image: {image_path}")
-        detect_faces(image_path, "cropped_faces")
+        detect_faces()
     except Exception as e:
         print(str(e))

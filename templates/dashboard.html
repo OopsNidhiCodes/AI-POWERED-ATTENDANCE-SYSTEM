@@ -1,0 +1,11 @@
+<h1>Welcome Faculty!</h1>
+<form action="/capture" method="post">
+    <button type="submit">Capture Image</button>
+</form>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" required>
+    <button type="submit">Upload Image</button>
+</form>
+
+<a href="/logout">Logout</a>
