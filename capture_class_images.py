@@ -22,7 +22,8 @@ def capture_image():
         image_path = os.path.join(save_path, image_filename)
         cv2.imwrite(image_path, frame)
         print(f"✅ Image saved: {image_path}")
-        return image_path  # Return the path of the captured image
+        return image_path, None  # Return the path of the captured image
     else:
         print("⚠️ Error: Failed to capture image!")
         return None
+capture_image()

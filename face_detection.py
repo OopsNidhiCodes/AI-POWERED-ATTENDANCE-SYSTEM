@@ -57,3 +57,4 @@ if __name__ == "__main__":
         detect_faces()
     except Exception as e:
         print(str(e))
+detect_faces()
