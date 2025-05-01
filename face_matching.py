@@ -15,7 +15,8 @@ os.makedirs(debug_cropped_faces_folder, exist_ok=True)
 
 # Load the Face Analysis model (ArcFace)
 face_analysis = FaceAnalysis(name='buffalo_l')
-face_analysis.prepare(ctx_id=0, det_size=(640, 640))
+face_analysis.prepare(ctx_id=0, det_size=(320, 320))  
+face_analysis.prepare(ctx_id=0, det_size=(512, 512))
 
 # Get a list of student images
 student_images = [os.path.join(student_database_folder, img) for img in os.listdir(student_database_folder) if img.endswith((".jpg", ".png"))]
@@ -29,6 +30,7 @@ def match_faces():
 
         # Load the cropped image
         img = cv2.imread(cropped_face_path)
+        print(f"Image shape: {img.shape if img is not None else 'None'}")
         if img is None:
             print(f"❌ Failed to read image: {cropped_face_path}")
             continue
@@ -77,7 +79,7 @@ def match_faces():
 
                 similarity = np.dot(face_embedding, ref_embedding) / (norm_face * norm_ref)
 
-                if similarity > 0.5:  # Adjusted threshold from 0.6 to 0.5
+                if similarity > 0.4:  # Adjusted threshold from 0.6 to 0.5
                     student_name = os.path.basename(student_img)
                     matched_students.add(student_name)
                     print(f"✅ Match Found: {student_name} (Similarity: {similarity:.2f})")
@@ -98,6 +100,8 @@ def match_faces():
     # Print matched students
     print(f"📌 Matched students: {matched_students}")
     print(f"✅ Attendance file updated: {attendance_file}")
+
+    return list(matched_students)
 
 # Main execution
 if __name__ == "__main__":

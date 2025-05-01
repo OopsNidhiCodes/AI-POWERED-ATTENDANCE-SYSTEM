@@ -1,6 +1,7 @@
 import cv2
 import os
 from mtcnn import MTCNN
+from fix_images import fix_image
 
 # Initialize MTCNN detector
 detector = MTCNN()
@@ -48,8 +49,16 @@ def detect_faces():
         cv2.imwrite(face_filename, face_crop)
         cropped_faces.append(face_filename)
         print(f"✅ Cropped face saved: {face_filename}")
+        
+    for face_path in cropped_faces:
+        fix_image(face_path)
+    
+    try:
+        # Your existing code...
+        return cropped_faces, None  # Return faces and no error
+    except Exception as e:
+        return None, str(e)  # Return no faces and the error
 
-    return cropped_faces
 
 # Main execution (for testing)
 if __name__ == "__main__":
@@ -57,4 +66,3 @@ if __name__ == "__main__":
         detect_faces()
     except Exception as e:
         print(str(e))
-detect_faces()

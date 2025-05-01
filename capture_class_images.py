@@ -26,4 +26,3 @@ def capture_image():
     else:
         print("⚠️ Error: Failed to capture image!")
         return None
-capture_image()
