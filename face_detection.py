@@ -1,7 +1,7 @@
 import cv2
 import os
 from mtcnn import MTCNN
-from fix_images import fix_image
+# from fix_images import fix_images
 
 # Initialize MTCNN detector
 detector = MTCNN()
@@ -50,8 +50,8 @@ def detect_faces():
         cropped_faces.append(face_filename)
         print(f"✅ Cropped face saved: {face_filename}")
         
-    for face_path in cropped_faces:
-        fix_image(face_path)
+    # for face_path in cropped_faces:
+    #     fix_images(face_path)
     
     try:
         # Your existing code...
